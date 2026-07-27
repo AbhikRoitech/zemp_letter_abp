@@ -1636,12 +1636,19 @@ sap.ui.define([
 			this.getNewLocationSet();
 		},
 		// Added by Arnab - 02.06.2026
+		// fix By: Abhik
+		// Issue: When a user types in the Employee Input field (empItems) on the HRBP Action tab, the suggestion dropdown is slow to populate.
 		onEmployeeLiveSearch: function (oEvent) {
 			var sValue = oEvent.getParameter("value");
 			if (!sValue || sValue.length < 3) {
 				return;
 			}
-			this._callEmployeeSearch(sValue);
+			if (this._employeeSearchTimer) {
+				clearTimeout(this._employeeSearchTimer);
+			}
+			this._employeeSearchTimer = setTimeout(function () {
+				this._callEmployeeSearch(sValue);
+			}.bind(this), 400);
 		},
 		_callEmployeeSearch: function (sValue) {
 			var oView = this.getView();
@@ -1650,6 +1657,9 @@ sap.ui.define([
 			var oDataModel = this.getOwnerComponent().getModel();
 			var oUserId = oUser;
 			var sKeyValue = oStateModel.getProperty("/selectedAction");
+
+			this._employeeSearchSeq = (this._employeeSearchSeq || 0) + 1;
+			var iSeq = this._employeeSearchSeq;
 
 			var aFilters = [
 				new sap.ui.model.Filter(
@@ -1671,10 +1681,18 @@ sap.ui.define([
 			oDataModel.read("/EmpIdDropDown", {
 				filters: aFilters,
 				success: function (oData) {
-					var oJsonModel = new sap.ui.model.json.JSONModel({
-						AllEmployees: oData.results
-					});
-					this.getView().setModel(oJsonModel, "employeeModelId");
+					if (iSeq !== this._employeeSearchSeq) {
+						return;
+					}
+					var oJsonModel = this.getView().getModel("employeeModelId");
+					if (oJsonModel) {
+						oJsonModel.setProperty("/AllEmployees", oData.results);
+					} else {
+						oJsonModel = new sap.ui.model.json.JSONModel({
+							AllEmployees: oData.results
+						});
+						this.getView().setModel(oJsonModel, "employeeModelId");
+					}
 				}.bind(this),
 				error: function (oError) {
 					console.log("Error in search", oError);
