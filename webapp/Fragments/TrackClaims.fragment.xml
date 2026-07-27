@@ -1,0 +1,65 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc">
+	<VBox width="100%" class="customGridSpacingA">
+		<Table id="idClaimsTable" items="{claimsModel>/}">
+			<headerToolbar>
+				<OverflowToolbar design="Transparent">
+					<Title id="tableHeader" text="" visible="{= !${device>/system/phone}}"/>
+					<ToolbarSpacer visible="{= !${device>/system/phone}}"/>
+					<SearchField id="claimsSearchField" tooltip="Search Claims" search=".onSearch" width="auto">
+						<layoutData>
+							<OverflowToolbarLayoutData shrinkable="true" priority="NeverOverflow"/>
+						</layoutData>
+					</SearchField>
+					<ToolbarSeparator visible="{= !${device>/system/phone}}"/>
+					<!-- Sort Button -->
+					<OverflowToolbarButton icon="sap-icon://sort" text="Sort" tooltip="Sort" press="onSort">
+						<layoutData>
+							<OverflowToolbarLayoutData priority="Low" group="1"/>
+						</layoutData>
+					</OverflowToolbarButton>
+					<!-- Filter Button -->
+					<OverflowToolbarButton icon="sap-icon://filter" text="Filter" tooltip="Filter" press="onFilter">
+						<layoutData>
+							<OverflowToolbarLayoutData priority="Low" group="1"/>
+						</layoutData>
+					</OverflowToolbarButton>
+					<!-- Group Button -->
+					<OverflowToolbarButton icon="sap-icon://group-2" text="Group" tooltip="Group" press="onGroup">
+						<layoutData>
+							<OverflowToolbarLayoutData priority="Low" group="1"/>
+						</layoutData>
+					</OverflowToolbarButton>
+					<ToolbarSeparator/>
+					<OverflowToolbarButton icon="sap-icon://excel-attachment" text="Export" tooltip="Export to Spreadsheet" press="onExportSpreadsheet"
+						visible="{device>/system/desktop}">
+						<layoutData>
+							<OverflowToolbarLayoutData priority="Low" group="1"/>
+						</layoutData>
+					</OverflowToolbarButton>
+				</OverflowToolbar>
+			</headerToolbar>
+			<columns>
+				<Column><Text text="Request Id"/></Column>
+				<Column><Text text="Action"/></Column>
+				<Column><Text text="Requestor"/></Column>
+				<Column><Text text="Employee"/></Column>
+				<Column><Text text="Effective Date"/></Column>
+				<Column><Text text="Next Approval"/></Column>
+				<Column><Text text="Status"/></Column>
+			</columns>
+			<items>
+				<ColumnListItem press="onRequestPress">
+					<cells>
+						<Link text="{claimsModel>RequestId}" press="onRequestPress"/>
+						<Text text="{claimsModel>ActionText}"/>
+						<Text text="{claimsModel>CreatedBy}"/>
+						<Text text="{claimsModel>EmpName}"/>
+						<Text text="{claimsModel>EffectiveDate}"/>
+						<Text text="{claimsModel>NextAprvr}"/>
+						<Text text="{claimsModel>Status}"/>
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>
+	</VBox>
+</core:FragmentDefinition>

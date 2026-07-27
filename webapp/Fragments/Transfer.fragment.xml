@@ -1,0 +1,107 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
+	<VBox class="sapUiSmallMargin">
+		<!-- Main Form -->
+		<f:SimpleForm id="TransferForm" class="formWithLargeLabels" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5"
+			labelSpanM="5" emptySpanXL="0" emptySpanL="0" emptySpanM="0" columnsXL="2" columnsL="2" columnsM="2" columnS="1"
+			singleContainerFullSize="false">
+			<!-- Employee Details (Left Side) -->
+			<core:Title text="Employee Details"/>
+			<Label text="Employee" class="customLabelCss"/>
+			<Input value="{employeeModel>/Emp}" editable="false"/>
+			<Label text="Current SBU-Org. Unit" class="customLabelCss"/>
+			<Input value="{employeeModel>/SBU}" editable="false"/>
+			<Label text="Current Location-Building"/>
+			<Input value="{employeeModel>/Location}" editable="false"/>
+			<Label text="Current Designation"/>
+			<Input value="{employeeModel>/Designation}" tooltip="{employeeModel>/Designation}" editable="false"/>
+			<!-- Manager Details (Right Side) -->
+			<core:Title text="Manager Details"/>
+			<Label text="Reporting Manager"/>
+			<Input value="{employeeModel>/manager}" editable="false"/>
+			<Label text="RM's Designation"/>
+			<Input value="{employeeModel>/RM_Designation}" tooltip="{employeeModel>/RM_Designation}" editable="false"/>
+			<Label text="HOD"/>
+			<Input value="{employeeModel>/Hod}" editable="false"/>
+			<Label text="HOD Designation"/>
+			<Input value="{employeeModel>/Hod1Designation}" editable="false" tooltip="{employeeModel>/Hod1Designation}"/>
+		</f:SimpleForm>
+		<!-- Transfer Details Section -->
+		<HBox justifyContent="Center" class="sapUiMediumMarginTop">
+			<VBox width="80%" class="sapUiSmallMargin">
+				<f:SimpleForm id="TransferDetailForm" class="formWithLargeLabels" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4"
+					labelSpanL="5" labelSpanM="5" emptySpanXL="0" emptySpanL="0" emptySpanM="0" columnsXL="2" columnsL="2" columnsM="2" columnS="1"
+					singleContainerFullSize="false">
+					<!-- Details (Left Side) -->
+					<core:Title text="Transfer Details"/>
+					<Label text="New SBU" class="customLabelCss"/>
+					<!--<Select items="{newSBUModel>/results}">-->
+					<!--	<core:Item key="{newSBUModel>id}" text="{newSBUModel>name}"/>-->
+					<!--</Select>-->
+					<ComboBox items="{newSBUModel>/results}" selectionChange="onNewSBUChange">
+						<core:Item key="{newSBUModel>SBUCode}" text="{newSBUModel>SBUDescription} - {newSBUModel>SBUCode}"/>
+					</ComboBox>
+					<Label text="New Location" class="customLabelCss"/>
+					<!--<Input editable="false"/>-->
+					<ComboBox selectionChange="onNewLocSelectionChange" items="{newLocationModel>/results}">
+						<core:Item key="{newLocationModel>LocationId}" text="{newLocationModel>LocationName} - {newLocationModel>LocationId}"/>
+					</ComboBox>
+					<Label text="New Designation" class="customLabelCss"/>
+					<Input value="{empModel>/NewDesignation}" liveChange="onDesignationLiveChange"/>
+					<Label text="New RM" class="customLabelCss"/>
+					<!--<HBox>-->
+					<!--<ComboBox selectedKey="{empModel>/NewRMId}" selectionChange="onNewRMSelectionChange" items="{rmModel>/results}">-->
+					<!--	<core:Item key="{rmModel>empId}" text="{rmModel>empName} - {rmModel>empId}"/>-->
+					<!--</ComboBox>-->
+					<Input id="newRMItemsTransfer" placeholder="Select Options" showSuggestion="true" suggestionItems="{newRMModel>/results}"
+						liveChange=".newRMSearch" suggestionItemSelected="">
+						<suggestionItems>
+							<core:ListItem text="{newRMModel>EmplName} - {newRMModel>EmplId}" additionalText="{newRMModel>EmplId}"/>
+						</suggestionItems>
+					</Input>
+					<!--	<Text text="{empModel>/NewRMDisplay}" class="sapUiSmallMarginBegin sapUiSmallMarginTop"/>-->
+					<!--</HBox>-->
+					<!--<Label text=""/>-->
+					<!--<CheckBox selected="{empModel>/MatrixManagerSelected}" text="Matrix Manager" select="onMatrixCheck"/>-->
+					<!--<Label text="Matrix Manager" class="customLabelCss"/>-->
+					<!--<Input value="{empModel>/NewMMId}" enabled="{empModel>/MatrixManagerSelected}"/>-->
+					<!--Details (Right Side) -->
+					<core:Title text=""/>
+					<Label text="New Org Unit" class="customLabelCss"/>
+					<!--<Select width="200px" items="{orgModel>/results}">-->
+					<!--	<core:Item key="{orgModel>id}" text="{orgModel>name}"/>-->
+					<!--</Select>-->
+					<ComboBox id="newOrgUnit" items="{newOrgUnitModel>/results}">
+						<core:Item key="{newOrgUnitModel>OrgUnit}" text="{newOrgUnitModel>OrgUnitDescription} - {newOrgUnitModel>OrgUnit}"/>
+					</ComboBox>
+					<Label text="New Building" class="customLabelCss"/>
+					<!--<Select width="200px" items="{buildingModel>/results}">-->
+					<!--	<core:Item key="{buildingModel>id}" text="{buildingModel>name}"/>-->
+					<!--</Select>-->
+					<ComboBox id="newBuilding" items="{newBuildingModel>/results}">
+						<core:Item key="{newBuildingModel>BuildingNo}" text="{newBuildingModel>BuildingName} - {newBuildingModel>BuildingNo}"/>
+					</ComboBox>
+				</f:SimpleForm>
+				<VBox class="formWithLargeLabels">
+					<CheckBox selected="{empModel>/MatrixManagerSelected}" text="Matrix Manager" select="onMatrixCheck" class="sapUiTinyMarginBegin"/>
+					<f:SimpleForm id="MatrxMngEmpId" class="formWithLargeLabels" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5"
+						labelSpanM="5" emptySpanXL="0" emptySpanL="0" emptySpanM="0" columnsXL="2" columnsL="2" columnsM="2" columnS="1"
+						singleContainerFullSize="false" visible="false">
+						<f:content>
+							<Label text="Matrix Manager" class="customLabelCss"/>
+							<Input id="matrxMngrEmpIdTransfer" placeholder="Select Manager Id" showSuggestion="true" suggestionItems="{MatrxMngrEmpSetModel>/results}"
+								liveChange=".getMatrixManagerSet" suggestionItemSelected="">
+								<suggestionItems>
+									<core:ListItem text="{MatrxMngrEmpSetModel>EmplName} - {MatrxMngrEmpSetModel>EmplId}" additionalText="{MatrxMngrEmpSetModel>EmplId}"/>
+								</suggestionItems>
+							</Input>
+							<!--<ComboBox items="" enabled="{empModel>/MatrixManagerSelected}">-->
+							<!--	<core:Item key="" text=""/>-->
+							<!--</ComboBox>-->
+							<!--<Input value="{empModel>/NewMMId}" enabled="{empModel>/MatrixManagerSelected}"/>-->
+						</f:content>
+					</f:SimpleForm>
+				</VBox>
+			</VBox>
+		</HBox>
+	</VBox>
+</core:FragmentDefinition>

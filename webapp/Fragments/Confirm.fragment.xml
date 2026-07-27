@@ -1,0 +1,224 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
+	<VBox justifyContent="Center" fitContainer="true">
+		<!-- Employee ID above Employee Details -->
+		<VBox visible="{employeeModel>/formVisible}">
+			<f:SimpleForm class="formWithLargeLabels" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4" labelSpanL="5" labelSpanM="5"
+				emptySpanXL="0" emptySpanL="0" emptySpanM="0" columnsXL="2" columnsL="2" columnsM="2" columnS="1">
+				<core:Title text="Employee Details"/>
+				<Label text="Employee" class="customLabelCss"/>
+				<Input value="{employeeModel>/Emp}" editable="false"/>
+				<Label text="Current SBU-Org. Unit" class="customLabelCss"/>
+				<Input value="{employeeModel>/SBU}" editable="false"/>
+				<Label text="Current Location-Building"/>
+				<Input value="{employeeModel>/Location}" editable="false"/>
+				<Label text="Current Designation"/>
+				<Input value="{employeeModel>/Designation}" tooltip="{employeeModel>/Designation}" editable="false"/>
+				<core:Title text="Manager Details"/>
+				<Label text="Reporting Manager"/>
+				<Input value="{employeeModel>/manager}" editable="false"/>
+				<Label text="RM's Designation"/>
+				<Input value="{employeeModel>/RM_Designation}" tooltip="{employeeModel>/RM_Designation}" editable="false"/>
+				<Label text="HOD"/>
+				<Input value="{employeeModel>/Hod}" editable="false"/>
+				<Label text="HOD Designation"/>
+				<Input value="{employeeModel>/Hod1Designation}" editable="false" tooltip="{employeeModel>/Hod1Designation}"/>
+			</f:SimpleForm>
+			<!-- Feedback + Action -->
+			<HBox class="sapUiSmallMargin" renderType="Bare">
+				<!-- Feedback Parameters (left) -->
+				<VBox width="45%" class="sapUiMediumMarginEnd formWithLargeLabels">
+					<Title text="Feedback Parameters" level="H3" class="formSectionTitle"/>
+					<!-- Quantity of Output -->
+					<HBox alignItems="Center" justifyContent="Start" class="sapUiTinyMarginBottom">
+						<Label required="true" text="Quantity of Output" class="feedbackLabel" width="268px"/>
+						<Button icon="sap-icon://hint" type="Transparent" press="onPressPopover" class="iconButton filledCircle">
+							<customData>
+								<core:CustomData key="parameterKey" value="Quantity of Output"/>
+							</customData>
+						</Button>
+						<ComboBox placeholder="Select Rating" editable="{= !${feedbackModel>/readOnly} }" selectedKey="{feedbackModel>/Quantity}"
+							items="{feedbackModel>/Ratings}" class="tinyCombo" width="115%">
+							<layoutData><FlexItemData growFactor="1"/></layoutData>
+							<core:Item key="{feedbackModel>text}" text="{feedbackModel>text}"/>
+						</ComboBox>
+					</HBox>
+					<!-- Quality of Output -->
+					<HBox alignItems="Center" justifyContent="Start" class="sapUiTinyMarginBottom">
+						<Label required="true" text="Quality of Output" class="feedbackLabel" width="268px"/>
+						<Button icon="sap-icon://hint" type="Transparent" press="onPressPopover" class="iconButton filledCircle">
+							<customData>
+								<core:CustomData key="parameterKey" value="Quality of Output"/>
+							</customData>
+						</Button>
+						<ComboBox placeholder="Select Rating" editable="{= !${feedbackModel>/readOnly} }" selectedKey="{feedbackModel>/Quality}"
+							items="{feedbackModel>/Ratings}" class="tinyCombo" width="115%">
+							<layoutData><FlexItemData growFactor="1"/></layoutData>
+							<core:Item key="{feedbackModel>text}" text="{feedbackModel>text}"/>
+						</ComboBox>
+					</HBox>
+					<!-- Responsibility and Initiative -->
+					<HBox alignItems="Center" justifyContent="Start" class="sapUiTinyMarginBottom">
+						<Label required="true" text="Responsibility and Initiative" class="feedbackLabel" width="268px"/>
+						<Button icon="sap-icon://hint" type="Transparent" press="onPressPopover" class="iconButton filledCircle">
+							<customData>
+								<core:CustomData key="parameterKey" value="Sense of Responsibility and Initiative"/>
+							</customData>
+						</Button>
+						<ComboBox placeholder="Select Rating" editable="{= !${feedbackModel>/readOnly} }" selectedKey="{feedbackModel>/Responsibility}"
+							items="{feedbackModel>/Ratings}" class="tinyCombo" width="115%">
+							<layoutData><FlexItemData growFactor="1"/></layoutData>
+							<core:Item key="{feedbackModel>text}" text="{feedbackModel>text}"/>
+						</ComboBox>
+					</HBox>
+					<!-- Teamwork and Collaboration -->
+					<HBox alignItems="Center" justifyContent="Start" class="sapUiTinyMarginBottom">
+						<Label required="true" text="Teamwork and Collaboration" class="feedbackLabel" width="268px"/>
+						<Button icon="sap-icon://hint" type="Transparent" press="onPressPopover" class="iconButton filledCircle">
+							<customData>
+								<core:CustomData key="parameterKey" value="Teamwork and Collaboration"/>
+							</customData>
+						</Button>
+						<ComboBox placeholder="Select Rating" editable="{= !${feedbackModel>/readOnly} }" selectedKey="{feedbackModel>/Teamwork}"
+							items="{feedbackModel>/Ratings}" class="tinyCombo" width="115%">
+							<layoutData><FlexItemData growFactor="1"/></layoutData>
+							<core:Item key="{feedbackModel>text}" text="{feedbackModel>text}"/>
+						</ComboBox>
+					</HBox>
+					<!-- Time Management -->
+					<HBox alignItems="Center" justifyContent="Start" class="sapUiTinyMarginBottom">
+						<Label required="true" text="Time Management and Discipline" class="feedbackLabel" width="268px"/>
+						<Button icon="sap-icon://hint" type="Transparent" press="onPressPopover" class="iconButton filledCircle">
+							<customData>
+								<core:CustomData key="parameterKey" value="Time Management"/>
+							</customData>
+						</Button>
+						<ComboBox placeholder="Select Rating" editable="{= !${feedbackModel>/readOnly} }" selectedKey="{feedbackModel>/Time}"
+							items="{feedbackModel>/Ratings}" class="tinyCombo" width="115%">
+							<layoutData><FlexItemData growFactor="1"/></layoutData>
+							<core:Item key="{feedbackModel>text}" text="{feedbackModel>text}"/>
+						</ComboBox>
+					</HBox>
+					<!-- Confirmation / Extension -->
+					<HBox alignItems="Center" justifyContent="Center" class="sapUiLargeMarginTop">
+						<RadioButtonGroup class="sapUiSmallMarginTop" selectedIndex="{feedbackModel>/ProbationStatus}" columns="2">
+							<buttons>
+								<RadioButton text="Confirmation"/>
+								<RadioButton text="Extension of Probation"/>
+							</buttons>
+						</RadioButtonGroup>
+					</HBox>
+				</VBox>
+				<!-- Comments (right) -->
+				<VBox class="formWithLargeLabels" width="66%">
+					<Title text="Comments" level="H3" class="formCommentSectionTitle sapUiLargeMarginBegin"/>
+					<!-- RM1 -->
+					<VBox class="sapUiTinyMarginBottom" width="88%">
+						<!-- First Row: Label + Manager + Icon -->
+						<HBox alignItems="Center" justifyContent="Start" fitContainer="true" class="noSpaceHBox">
+							<Label required="true" text="RM1" class="feedbackLabel sapUiTinyMarginTop" width="4rem"/>
+							<Text text="{employeeModel>/manager}" class="commentUserName sapUiTinyMarginEnd"/>
+							<core:Icon visible="{feedbackModel>/readOnly}" src="sap-icon://accept" class="iconGreen" size="0.7rem"/>
+						</HBox>
+						<!-- Second Row: TextArea -->
+						<TextArea editable="{= !${feedbackModel>/readOnly} }" value="{feedbackModel>/CommentRM1}" class="commentSpace" maxLength="255" rows="2"
+							growing="false" width="115%">
+							<layoutData>
+								<FlexItemData growFactor="1"/>
+							</layoutData>
+						</TextArea>
+					</VBox>
+					<!-- RM2 -->
+					<VBox class="sapUiTinyMarginBottom" width="88%" visible="{= ${feedbackModel>/CommentRM2} !== '' }">
+						<HBox alignItems="Center" justifyContent="Start" fitContainer="true" class="noSpaceHBox">
+							<Label required="true" text="RM2" class="feedbackLabel sapUiTinyMarginTop" width="4rem"/>
+							<Text text="{feedbackModel>/Rm2Name}" class="commentUserName sapUiTinyMarginEnd"/>
+							<!-- Dynamic Icon -->
+							<core:Icon visible="{= ${feedbackModel>/Rm2Approver} === 'APP' }" src="sap-icon://accept" class="iconGreen" size="0.7rem"/>
+							<core:Icon visible="{= ${feedbackModel>/Rm2Approver} === 'REJ' }" src="sap-icon://decline" class="iconRed" size="0.7rem"/>
+						</HBox>
+						<TextArea value="{feedbackModel>/CommentRM2}" editable="false" class="commentSpace" maxLength="255" rows="2" growing="false" width="115%">
+							<layoutData>
+								<FlexItemData growFactor="1"/>
+							</layoutData>
+						</TextArea>
+					</VBox>
+					<!-- RM3 -->
+					<VBox class="sapUiTinyMarginBottom" width="88%" visible="{= ${feedbackModel>/CommentRM3} !== '' }">
+						<HBox alignItems="Center" justifyContent="Start" fitContainer="true" class="noSpaceHBox">
+							<Label required="true" text="RM3" class="feedbackLabel sapUiTinyMarginTop" width="4rem"/>
+							<Text text="{feedbackModel>/Rm3Name}" class="commentUserName sapUiTinyMarginEnd"/>
+							<core:Icon visible="{= ${feedbackModel>/Rm3Approver} === 'APP' }" src="sap-icon://accept" class="iconGreen" size="0.7rem"/>
+							<core:Icon visible="{= ${feedbackModel>/Rm3Approver} === 'REJ' }" src="sap-icon://decline" class="iconRed" size="0.7rem"/>
+						</HBox>
+						<TextArea value="{feedbackModel>/CommentRM3}" editable="false" class="commentSpace" maxLength="255" rows="2" growing="false" width="115%">
+							<layoutData><FlexItemData growFactor="1"/></layoutData>
+						</TextArea>
+					</VBox>
+					<!-- HOD1 -->
+					<VBox class="sapUiTinyMarginBottom" width="88%" visible="{= ${feedbackModel>/CommentHOD} !== '' }">
+						<HBox alignItems="Center" justifyContent="Start" fitContainer="true" class="noSpaceHBox">
+							<Label required="true" text="HOD1" class="feedbackLabel sapUiTinyMarginTop" width="4rem"/>
+							<Text text="{feedbackModel>/Hod1Name}" class="commentUserName sapUiTinyMarginEnd"/>
+							<core:Icon visible="{= ${feedbackModel>/Hod1Approver} === 'APP' }" src="sap-icon://accept" class="iconGreen" size="0.7rem"/>
+							<core:Icon visible="{= ${feedbackModel>/Hod1Approver} === 'REJ' }" src="sap-icon://decline" class="iconRed" size="0.7rem"/>
+						</HBox>
+						<TextArea value="{feedbackModel>/CommentHOD}" editable="false" class="commentSpace" maxLength="255" rows="2" growing="false" width="115%">
+							<layoutData><FlexItemData growFactor="1"/></layoutData>
+						</TextArea>
+					</VBox>
+					<!-- HOD2 -->
+					<VBox class="sapUiTinyMarginBottom" width="88%" visible="{= ${feedbackModel>/CommentHOD2} !== '' }">
+						<HBox alignItems="Center" justifyContent="Start" fitContainer="true" class="noSpaceHBox">
+							<Label required="true" text="HOD2" class="feedbackLabel sapUiTinyMarginTop" width="4rem"/>
+							<Text text="{feedbackModel>/Hod2Name}" class="commentUserName sapUiTinyMarginEnd"/>
+							<core:Icon visible="{= ${feedbackModel>/Hod2Approver} === 'APP' }" src="sap-icon://accept" class="iconGreen" size="0.7rem"/>
+							<core:Icon visible="{= ${feedbackModel>/Hod2Approver} === 'REJ' }" src="sap-icon://decline" class="iconRed" size="0.7rem"/>
+						</HBox>
+						<TextArea value="{feedbackModel>/CommentHOD2}" editable="false" class="commentSpace" maxLength="255" rows="2" growing="false" width="115%">
+							<layoutData><FlexItemData growFactor="1"/></layoutData>
+						</TextArea>
+					</VBox>
+					<!-- CHRO -->
+					<VBox class="sapUiTinyMarginBottom" width="88%" visible="{= ${feedbackModel>/CommentCHRO} !== '' }">
+						<HBox alignItems="Center" justifyContent="Start" fitContainer="true" class="noSpaceHBox">
+							<Label required="true" text="CHRO" class="feedbackLabel sapUiTinyMarginTop" width="4rem"/>
+							<Text text="{feedbackModel>/ChroName}" class="commentUserName sapUiTinyMarginEnd"/>
+							<core:Icon visible="{= ${feedbackModel>/ChroApprover} === 'APP' }" src="sap-icon://accept" class="iconGreen" size="0.7rem"/>
+							<core:Icon visible="{= ${feedbackModel>/ChroApprover} === 'REJ' }" src="sap-icon://decline" class="iconRed" size="0.7rem"/>
+						</HBox>
+						<TextArea value="{feedbackModel>/CommentCHRO}" editable="false" class="commentSpace" maxLength="255" rows="2" growing="false" width="115%">
+							<layoutData><FlexItemData growFactor="1"/></layoutData>
+						</TextArea>
+					</VBox>
+					<!-- HRBP -->
+					<VBox class="sapUiTinyMarginBottom" width="88%" visible="{= ${feedbackModel>/CommentHRBP} !== '' }">
+						<HBox alignItems="Center" justifyContent="Start" fitContainer="true" class="noSpaceHBox">
+							<Label required="true" text="HRBP" class="feedbackLabel sapUiTinyMarginTop" width="4rem"/>
+							<Text text="{feedbackModel>/HrbpName}" class="commentUserName sapUiTinyMarginEnd"/>
+							<core:Icon visible="{= ${feedbackModel>/HrbpApprover} === 'APP' }" src="sap-icon://accept" class="iconGreen" size="0.7rem"/>
+							<core:Icon visible="{= ${feedbackModel>/HrbpApprover} === 'REJ' }" src="sap-icon://decline" class="iconRed" size="0.7rem"/>
+						</HBox>
+						<TextArea value="{feedbackModel>/CommentHRBP}" editable="false" class="commentSpace" maxLength="255" rows="2" growing="false" width="115%">
+							<layoutData><FlexItemData growFactor="1"/></layoutData>
+						</TextArea>
+					</VBox>
+					<!--<HBox alignItems="Start" justifyContent="Start" class="sapUiTinyMarginBottom">-->
+					<!--	<Label required="true" text="RM1" class="feedbackLabel" width="4rem"/>-->
+					<!--	<VBox width="115%">-->
+					<!-- The actual comment -->
+					<!--		<TextArea value="{feedbackModel>/CommentRM1}" maxLength="255" rows="2" growing="false" width="115%">-->
+					<!--			<layoutData>-->
+					<!--				<FlexItemData growFactor="1"/>-->
+					<!--			</layoutData>-->
+					<!--		</TextArea>-->
+					<!-- User name just below the textarea -->
+					<!--		<Text text="– Rajesh" class="commentUserName"/>-->
+					<!--	</VBox>-->
+					<!--	<core:Icon src="sap-icon://accept" class="iconGreen" size="1rem"/>-->
+					<!--</HBox>-->
+					<!-- (Other comment blocks kept commented as in your original) -->
+				</VBox>
+			</HBox>
+		</VBox>
+	</VBox>
+</core:FragmentDefinition>

@@ -1,0 +1,45 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form" xmlns:core="sap.ui.core">
+	<VBox>
+		<VBox class="sapUiSmallMargin">
+			<f:SimpleForm id="SimpleFormDisplay354wideDual" class="formWithLargeLabels" editable="true" layout="ResponsiveGridLayout" labelSpanXL="4"
+				labelSpanL="5" labelSpanM="5" emptySpanXL="0" emptySpanL="0" emptySpanM="0" columnsXL="2" columnsL="2" columnsM="2" columnS="1"
+				singleContainerFullSize="false">
+				<!-- Employee Details (Left Side) -->
+				<core:Title text="Employee Details"/>
+				<Label text="Employee" class="customLabelCss"/>
+				<Input value="{employeeModel>/Emp}" editable="false"/>
+				<Label text="Current SBU-Org. Unit" class="customLabelCss"/>
+				<Input value="{employeeModel>/SBU}" editable="false"/>
+				<Label text="Current Location-Building"/>
+				<Input value="{employeeModel>/Location}" editable="false"/>
+				<Label text="Current Designation"/>
+				<Input value="{employeeModel>/Designation}" tooltip="{employeeModel>/Designation}" editable="false"/>
+				<!-- Manager Details (Right Side) -->
+				<core:Title text="Manager Details"/>
+				<Label text="Reporting Manager"/>
+				<Input value="{employeeModel>/manager}" editable="false"/>
+				<Label text="RM's Designation"/>
+				<Input value="{employeeModel>/RM_Designation}" tooltip="{employeeModel>/RM_Designation}" editable="false"/>
+				<Label text="HOD"/>
+				<Input value="{employeeModel>/Hod}" editable="false"/>
+				<Label text="HOD Designation"/>
+				<Input value="{employeeModel>/Hod1Designation}" editable="false" tooltip="{employeeModel>/Hod1Designation}"/>
+			</f:SimpleForm>
+		</VBox>
+		<VBox alignItems="Center" class="sapUiLargeMarginTop">
+			<HBox alignItems="Center" justifyContent="Center" class="sapUiMediumMarginBottom" width="100%">
+				<Label text="Completed Years of Service" width="250px" textAlign="Right" class="compactLabel sapUiSmallMarginEnd"/>
+				<Text text=":" class="compactLabel sapUiTinyMarginBeginEnd"/>
+				<Input id="idCompletedYears" width="250px" class="compactLabel" value="{TaxExemption>/Betrg}"
+					editable="{= ${editableNonEditableModel>/FoodWallDis} ? true : false}" textAlign="Center" liveChange="onFWChange"/>
+			</HBox>
+			<HBox alignItems="Center" justifyContent="Center" class="sapUiMediumMarginBottom" width="100%">
+				<Label text="Effective Date of Retirement" width="250px" textAlign="Right" class="compactLabel sapUiSmallMarginEnd"/>
+				<Text text=":" class="compactLabel sapUiTinyMarginBeginEnd"/>
+				<DatePicker id="idRetirementDate" width="250px" class="compactLabel" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy"
+					value="{ path: 'TaxExemption>/Betrg', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd-MM-yyyy' } }"
+					editable="{= ${editableNonEditableModel>/FoodWallDis} ? true : false}" textAlign="Center" liveChange="onFWChange"/>
+			</HBox>
+		</VBox>
+	</VBox>
+</core:FragmentDefinition>

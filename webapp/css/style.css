@@ -1,0 +1,314 @@
+.customLabelCss.sapUiRespGridMedia-Std-Phone.sapUiFormResGridCont>.sapUiFormElementLbl:not(.sapUiRespGridSpanS12)>.sapMLabel,
+.sapUiRespGridMedia-Std-Tablet.sapUiFormResGridCont>.sapUiFormElementLbl:not(.sapUiRespGridSpanM12)>.sapMLabel,
+.sapUiRespGridMedia-Std-Desktop.sapUiFormResGridCont>.sapUiFormElementLbl:not(.sapUiRespGridSpanL12)>.sapMLabel,
+.sapUiRespGridMedia-Std-LargeDesktop.sapUiFormResGridCont>.sapUiFormElementLbl:not(.sapUiRespGridSpanXL12)>.sapMLabel {
+    text-align: start !important;
+    display: inline-block;
+    /*min-width: 4rem;*/
+    /* or adjust as needed */
+    /*margin-left: 1rem;*/
+    /*vertical-align: middle;*/
+}
+
+
+.minimalTabBar .sapMITH {
+    padding: 0.25rem 0.5rem !important;
+    height: auto !important;
+}
+
+.formWithLargeLabels .sapUiFormTitle {
+    font-size: 1.5rem !important;
+    font-weight: 300;
+
+}
+
+.formSectionTitle {
+    font-weight: 300;
+    font-size: 1.5rem;
+    /* or match the core title */
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.custBoldAttr .sapMObjectAttributeTitle,
+.custBoldAttr .sapMObjectAttributeText,
+.custBoldAttr .sapMObjectAttributeColon {
+    font-weight: 700 !important;
+    /* Bold title and text */
+    font-size: 1.5rem !important;
+    /* Optional: slightly bigger */
+    color: #282828 !important;
+    /* Optional: darker text */
+}
+
+.formCommentSectionTitle {
+    font-weight: 300;
+    font-size: 1.5rem;
+    /* or match the core title */
+    padding-inline-start: 4rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Reduce vertical space in ObjectHeader */
+.custHeaderDesign {
+    padding-bottom: 0 !important;
+    /* remove extra bottom padding */
+    margin-bottom: 0 !important;
+    /* remove extra bottom margin */
+}
+
+/* Reduce spacing of ObjectAttribute inside the header */
+.custHeaderDesign .sapMOHAttr {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.largeFontForm .sapMText {
+    font-size: 1.1rem !important;
+    color: #222;
+    /* Optional: slightly darker */
+}
+
+.formWithLargeLabels .sapMLabel {
+    font-size: 16px !important;
+    font-weight: 600;
+    /* optional: make bold */
+}
+
+/* All IconTabBar tab texts */
+.sapMITB .sapMITBItem .sapMITBText,
+.sapMITB .sapMITBItemSelected .sapMITBText {
+    font-size: 16px !important;
+    /* larger font */
+    font-weight: 600 !important;
+    /* semi-bold */
+    color: #000000 !important;
+    /* black color */
+    font-family: "72", "72full", Arial, Helvetica, sans-serif !important;
+}
+
+/* Optional: selected tab more prominent */
+.sapMITB .sapMITBItemSelected .sapMITBText {
+    font-weight: 700 !important;
+    /* bold for selected tab */
+    color: #1a1a1a !important;
+    /* darker */
+}
+
+.sapMLabel.largeActionLabel {
+    font-size: 17px !important;
+    font-weight: 600;
+    /*color: #333 !important;*/
+    margin-right: 1rem !important;
+}
+
+.sapMLabel.largeLabel {
+    font-size: 16px !important;
+    font-weight: 600;
+    /*color: #333 !important;*/
+    margin-right: 1rem !important;
+}
+
+.formRowHBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0;
+    /* ensure no extra padding */
+    margin: 0;
+    /* reset default margin */
+}
+
+.boldSelect .sapMSltLabel,
+.boldSelect .sapMSltItem {
+    font-weight: 600;
+    color: #282828;
+}
+
+.sapMPopover .sapMSelectListItem,
+.sapMDialog .sapMSelectListItem {
+    font-weight: 600;
+    color: #282828;
+}
+
+.formFieldPair {
+    display: flex;
+    align-items: center;
+    /*gap: 0.5rem;*/
+    /* small space between label and input */
+    /*margin-right: 15rem;*/
+    /* LARGE horizontal space between field pairs */
+}
+
+.labelInline {
+    min-width: 120px;
+    text-align: right;
+    font-size: 16px !important;
+    font-weight: 600;
+}
+
+/* Stronger selector to override SAPUI5 styles */
+.radioButtonItem .sapMRb>.sapMRbBLabel {
+    font-size: 17px !important;
+    font-weight: 800 !important;
+    /*color: #2b2b2b !important;*/
+    color: #666666;
+    /*text-shadow: 0.3px 0 0 currentColor;*/
+}
+
+.sapMTitleH5 {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.checkboxContainer {
+    margin-top: 0.5rem !important;
+    /* or use px like 8px */
+}
+
+.radioGroupWrapper {
+    display: flex;
+    gap: 8rem;
+    /* Adjust spacing here */
+}
+
+.radioButtonItem {
+    display: flex;
+    align-items: center;
+}
+
+
+/* Icon container */
+.iconBox {
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Icon-like transparent button styling */
+.iconButton {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    min-width: 0 !important;
+    height: auto !important;
+    box-shadow: none !important;
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
+.feedbackLabel::after {
+    content: ":";
+    padding-left: 0.2rem;
+
+}
+
+.commentUserName {
+    margin-top: 4px;
+}
+
+/* Circular filled icon */
+.filledCircle .sapUiIcon {
+    color: white !important;
+    /* Icon color */
+    font-size: 0.6rem;
+    /* Slightly bigger */
+}
+
+.filledCircle {
+    background-color: #0070f2 !important;
+    /* Primary blue */
+    border-radius: 50% !important;
+    /* Circle shape */
+    width: 1rem !important;
+    /* Size of circle */
+    height: 1rem !important;
+    min-width: 1rem !important;
+    /* Prevent stretching */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    margin: 0.8rem;
+    /* Small spacing from label */
+}
+
+/*.filledCircle:hover {*/
+/*    background-color: #0a6ed1 !important;*/
+/* Darker on hover */
+/*}*/
+
+
+.iconButton.greenIcon .sapMBtnIcon {
+    /*color: #107e3e !important;*/
+    /* SAP standard green */
+}
+
+.iconButton.redIcon .sapMBtnIcon {
+    color: #bb0000 !important;
+    /* SAP standard red or stronger red */
+}
+
+/* New Changes */
+.iconGreen {
+    /*margin: 0.5rem;*/
+    color: white;
+    width: 0.5rem !important;
+    /* Size of circle */
+    height: 0.5rem !important;
+    align-items: center;
+    text-align: center !important;
+    /* icon symbol color */
+    background-color: green;
+    /* filled background */
+    border-radius: 50%;
+    /* make it circular */
+    padding: 0.3rem;
+    margin-top: 4px;
+}
+
+.iconRed {
+    /*margin: 0.8rem;*/
+    color: white;
+    align-items: center;
+    width: 0.5rem !important;
+    /* Size of circle */
+    height: 0.5rem !important;
+    text-align: center !important;
+    background-color: red;
+    border-radius: 50%;
+    padding: 0.3rem;
+    margin-top: 4px;
+}
+
+/* HEADER CSS CUSTOM */
+
+/*.sapMITBContent {*/
+/*    margin: 0 !important;*/
+/*    padding: 0 !important;*/
+/*}*/
+
+.compactHeader {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.compactHeaderRow {
+    padding: 8px 14px;
+}
+
+.compactLabel {
+    margin-top: 4px;
+    font-weight: 600;
+    font-size: 18px !important;
+}
+
+.commentUserName {
+    font-weight: 600;
+}
+
+.compactText {
+    font-weight: 600;
+    margin-left: 5px;
+    font-size: 18px !important;
+}

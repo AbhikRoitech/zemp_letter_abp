@@ -1,0 +1,31 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<ViewSettingsDialog id="viewSettingsDialog" confirm="onConfirmViewSettings" reset="onResetViewSettings">
+		<sortItems>
+			<ViewSettingsItem text="Request Id" key="RequestId" selected="true"/>
+			<ViewSettingsItem text="Action" key="ActionText"/>
+			<ViewSettingsItem text="Requestor" key="UserId"/>
+			<ViewSettingsItem text="Employee" key="EmpName"/>
+			<ViewSettingsItem text="Effective Date" key="EffectiveDate"/>
+			<ViewSettingsItem text="Next Approval" key="NextAprvr"/>
+			<ViewSettingsItem text="Status" key="Status"/>
+		</sortItems>
+		<groupItems>
+			<ViewSettingsItem text="Status" key="Status"/>
+			<ViewSettingsItem text="Action" key="ActionText"/>
+			<ViewSettingsItem text="Next Approval" key="NextAprvr"/>
+		</groupItems>
+		<filterItems>
+			<ViewSettingsFilterItem text="Status" key="Status" multiSelect="true">
+				<items>
+					<ViewSettingsItem text="RM1 pending Approval" key="Status"/>
+					<ViewSettingsItem text="RM2 pending Approval" key="Status"/>
+					<ViewSettingsItem text="RM3 pending Approval" key="Status"/>
+					<ViewSettingsItem text="HOD1 pending Approval" key="Status"/>
+					<ViewSettingsItem text="HOD2 pending Approval" key="Status"/>
+					<ViewSettingsItem text="CHRO pending Approval" key="Status"/>
+					<ViewSettingsItem text="HRBP pending Approval" key="Status"/>
+				</items>
+			</ViewSettingsFilterItem>
+		</filterItems>
+	</ViewSettingsDialog>
+</core:FragmentDefinition>

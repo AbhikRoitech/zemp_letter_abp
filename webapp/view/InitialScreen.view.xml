@@ -1,0 +1,192 @@
+<mvc:View height="100%" controllerName="empletter.zemployeeletter.controller.InitialScreen" xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:f="sap.ui.layout.form" xmlns:html="http://www.w3.org/1999/xhtml">
+	<Page id="idPage" showHeader="false" title="My Worklist" enableScrolling="true" showFooter="true" class="page_class">
+		<!-- 🔽 Direct Role Tabs -->
+		<!-- 🔽 Tabs -->
+		<IconTabBar id="roleActionTabBar" headerMode="Inline" expandable="false" selectedKey="EMP" select=".onRoleTabSelect">
+			<items>
+				<!-- EMPLOYEE TAB -->
+				<IconTabFilter key="EMP" text="Employee Action" visible="{roleModel>/roleVisibility/showEMP}">
+					<VBox class="compactHeader" visible="{= ${employeeModel>/EmpId} ? true : false }" width="100%">
+						<HBox class="compactHeaderRow" justifyContent="SpaceBetween" width="100%" alignItems="Center">
+							<!-- Left side -->
+							<HBox alignItems="Center">
+								<Label text="Request Id:" class="compactLabel"/>
+								<Text text="{employeeModel>/RequestId}" class="compactText"/>
+							</HBox>
+							<!-- Right side -->
+							<HBox alignItems="Center">
+								<Label text="Status:" class="compactLabel"/>
+								<Text text="{employeeModel>/Status}" class="compactText"/>
+							</HBox>
+						</HBox>
+					</VBox>
+					<f:SimpleForm id="roleActionFormEMP" editable="true" layout="ResponsiveGridLayout" class="sapUiTinyMarginTop">
+						<HBox class="formRowHBox">
+							<HBox class="formFieldPair">
+								<Label required="true" text="Request:" class="labelInline"/>
+								<!--<Select id="empComboBoxEMP" class="boldSelect" forceSelection="false" change=".onActionChange" editable="true" width="230px">-->
+								<!--	<core:Item key="C1" text="Confirmation"/>-->
+								<!--	<core:Item key="R1" text="Re-Designation"/>-->
+								<!--	<core:Item key="R2" text="Retirement"/>-->
+								<!--	<core:Item key="T1" text="Transfer"/>-->
+								<!--</Select>-->
+								<Select id="empComboBoxEMP" class="boldSelect" forceSelection="false" change=".onActionChange" editable="true" width="230px"
+									items="{stateModel>/Actions}">
+									<core:Item key="{stateModel>key}" text="{stateModel>text}"/>
+								</Select>
+							</HBox>
+						</HBox>
+					</f:SimpleForm>
+					<f:SimpleForm>
+						<HBox class="formRowHBox">
+							<HBox class="formFieldPair">
+								<Label required="true" text="Employee:" class="labelInline"/>
+								<ComboBox width="230px" selectedKey="{employeeModelId>/EmplId}" items="{ path: 'employeeModelId>/AllEmployees', templateShareable: false }"
+									selectionChange=".onEmployeeSelect" liveChange=".onEmployeeLiveSearch">
+									<core:Item key="{employeeModelId>EmplId}" text="{employeeModelId>EmplName} ({employeeModelId>EmplId})"/>
+								</ComboBox>
+							</HBox>
+							<HBox class="formFieldPair">
+								<Label required="true" text="Effective Date:" class="labelInline"/>
+								<DatePicker id="datePickerEMP" width="230px" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy"
+									value="{ path: 'employeeModel>/EffectiveDate', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd-MM-yyyy' } }"/>
+							</HBox>
+						</HBox>
+					</f:SimpleForm>
+					<VBox id="fragmentContainerEMP" class="customGridSpacingA"/>
+				</IconTabFilter>
+				<!-- MANAGER TAB -->
+				<IconTabFilter key="MGR" text="Manager Action" visible="{roleModel>/roleVisibility/showMGR}">
+					<VBox class="compactHeader" visible="{= ${employeeModel>/EmpId} ? true : false }" width="100%">
+						<HBox class="compactHeaderRow" justifyContent="SpaceBetween" width="100%" alignItems="Center">
+							<!-- Left side -->
+							<HBox alignItems="Center">
+								<Label text="Request Id:" class="compactLabel"/>
+								<Text text="{employeeModel>/RequestId}" class="compactText"/>
+							</HBox>
+							<!-- Right side -->
+							<HBox alignItems="Center">
+								<Label text="Status:" class="compactLabel"/>
+								<Text text="{employeeModel>/Status}" class="compactText"/>
+							</HBox>
+						</HBox>
+					</VBox>
+					<f:SimpleForm id="roleActionFormMGR" editable="true" layout="ResponsiveGridLayout" class="sapUiTinyMarginTop">
+						<HBox class="formRowHBox">
+							<HBox class="formFieldPair">
+								<Label required="true" text="Request:" class="labelInline"/>
+								<!--<Select id="empComboBoxMGR" class="boldSelect" forceSelection="false" change=".onActionChange" editable="true" width="230px">-->
+								<!--	<core:Item key="C1" text="Confirmation"/>-->
+								<!--	<core:Item key="R1" text="Re-Designation"/>-->
+								<!--	<core:Item key="R2" text="Retirement"/>-->
+								<!--	<core:Item key="T1" text="Transfer"/>-->
+								<!--</Select>-->
+								<Select id="empComboBoxMGR" enabled="{stateModel>/isEditable}" class="boldSelect" forceSelection="false" change=".onActionChange"
+									editable="true" width="275px" items="{stateModel>/Actions}">
+									<core:Item key="{stateModel>key}" text="{stateModel>text}"/>
+								</Select>
+							</HBox>
+						</HBox>
+					</f:SimpleForm>
+					<f:SimpleForm>
+						<HBox class="formRowHBox">
+							<HBox class="formFieldPair">
+								<Label required="true" text="Employee:" class="labelInline"/>
+								<Input width="230px" value="{employeeModel>/Emp}" visible="{= !${stateModel>/isEditable} }" editable="false"/>
+								<ComboBox id="idMangrCombox" width="230px" visible="{stateModel>/isEditable}" selectedKey="{employeeModelId>/EmplId}"
+									items="{ path: 'employeeModelId>/AllEmployees', templateShareable: false }" selectionChange=".onEmployeeSelect"
+									liveChange=".onEmployeeLiveSearch">
+									<core:Item key="{employeeModelId>EmplId}" text="{employeeModelId>EmplName} ({employeeModelId>EmplId})"/>
+								</ComboBox>
+							</HBox>
+							<HBox class="formFieldPair">
+								<Label required="true" text="Effective Date:" class="labelInline"/>
+								<DatePicker enabled="{stateModel>/isEditable}" id="datePickerMGR" width="230px" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy"
+									value="{ path: 'employeeModel>/EffectiveDate', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd-MM-yyyy' } }"
+									change=".handleDateChangeMngActn"/>
+							</HBox>
+						</HBox>
+					</f:SimpleForm>
+					<VBox id="fragmentContainerMGR" class="customGridSpacingA"/>
+				</IconTabFilter>
+				<!-- HR TAB -->
+				<IconTabFilter key="HR" text="HRBP Action" visible="{roleModel>/roleVisibility/showHR}">
+					<VBox class="compactHeader" visible="{= ${employeeModel>/EmpId} ? true : false }" width="100%">
+						<HBox class="compactHeaderRow" justifyContent="SpaceBetween" width="100%" alignItems="Center">
+							<!-- Left side -->
+							<HBox alignItems="Center">
+								<Label text="Request Id:" class="compactLabel"/>
+								<Text text="{employeeModel>/RequestId}" class="compactText"/>
+							</HBox>
+							<!-- Right side -->
+							<HBox alignItems="Center">
+								<Label text="Status:" class="compactLabel"/>
+								<Text text="{employeeModel>/Status}" class="compactText"/>
+							</HBox>
+						</HBox>
+					</VBox>
+					<f:SimpleForm id="roleActionFormHR" editable="true" layout="ResponsiveGridLayout" class="sapUiTinyMarginTop">
+						<HBox class="formRowHBox">
+							<HBox class="formFieldPair">
+								<Label required="true" text="Request:" class="labelInline"/>
+								<ComboBox id="empComboBoxHR" class="boldSelect" forceSelection="false" width="230px" showSuggestion="true" showValueHelp="true"
+									selectionChange=".onActionChange" items="{stateModel>/Actions}" enabled="{stateModel>/actionEnabled}">
+									<core:Item key="{stateModel>key}" text="{stateModel>text}"/>
+								</ComboBox>
+							</HBox>
+						</HBox>
+					</f:SimpleForm>
+					<f:SimpleForm>
+						<HBox class="formRowHBox">
+							<HBox class="formFieldPair">
+								<Label required="true" text="Employee:" class="labelInline"/>
+								<Input width="230px" id="empItems" placeholder="Select Employee" showSuggestion="true" suggestionItems="{employeeModelId>/AllEmployees}"
+									liveChange=".onEmployeeLiveSearch" suggestionItemSelected="onEmployeeSelection">
+									<suggestionItems>
+										<core:ListItem text="{employeeModelId>EmplName} - {employeeModelId>EmplId}" additionalText="{employeeModelId>EmplId}"/>
+									</suggestionItems>
+								</Input>
+							</HBox>
+							<HBox class="formFieldPair">
+								<Label required="true" text="Effective Date:" class="labelInline"/>
+								<DatePicker id="datePickerHR" width="230px" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" change=".handleDateChange"
+									value="{ path: 'employeeModel>/EffectiveDate', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd-MM-yyyy' } }"/>
+							</HBox>
+						</HBox>
+					</f:SimpleForm>
+					<VBox id="fragmentContainerHR" class="customGridSpacingA"/>
+				</IconTabFilter>
+				<!-- TRACK TAB -->
+				<IconTabFilter key="TRACK" text="Track List" visible="{roleModel>/roleVisibility/showTRACK}">
+					<VBox id="taskListBox" width="100%">
+						<core:Fragment fragmentName="empletter.zemployeeletter.Fragments.TrackClaims" type="XML"/>
+					</VBox>
+				</IconTabFilter>
+			</items>
+		</IconTabBar>
+		<!-- 🔽 Footer -->
+		<footer>
+			<OverflowToolbar visible="{footerModel>/visible}">
+				<Button type="Back" text="{i18n>Back}" class="normalBtn" press=".onBackPress"/>
+				<ToolbarSpacer/>
+				<Button text="Cancel" type="Reject" press=".onBackPress" enabled="{footerModel>/cancelEnabled}"/>
+				<Button type="Accept" text="{i18n>Save}" press=".onSubmitPress" enabled="{footerModel>/saveEnabled}">
+					<customData>
+						<core:CustomData key="operation" value="SAV"/>
+					</customData>
+				</Button>
+				<Button type="Accept" text="{i18n>Submit}" press=".onSubmit" enabled="{footerModel>/submitEnabled}">
+					<customData>
+						<core:CustomData key="operation" value="SUB"/>
+					</customData>
+				</Button>
+				<Button type="Accept" text="Edit" press=".onEdit" visible="{footerModel>/isEdit}">
+					<customData>
+						<core:CustomData key="operation" value="REJ"/>
+					</customData>
+				</Button>
+			</OverflowToolbar>
+		</footer>
+	</Page>
+</mvc:View>
