@@ -141,8 +141,8 @@
 						<HBox class="formRowHBox">
 							<HBox class="formFieldPair">
 								<Label required="true" text="Employee:" class="labelInline"/>
-								<Input width="230px" id="empItems" placeholder="Select Employee" showSuggestion="true" suggestionItems="{employeeModelId>/AllEmployees}"
-									liveChange=".onEmployeeLiveSearch" suggestionItemSelected="onEmployeeSelection">
+								<Input width="230px" id="empItems" placeholder="Select Employee" showSuggestion="true" enabled="{stateModel>/empFieldEnabled}" startSuggestion="3" filterSuggests="false" suggestionItems="{employeeModelId>/AllEmployees}"
+									suggest=".onEmployeeLiveSearch" suggestionItemSelected="onEmployeeSelection">
 									<suggestionItems>
 										<core:ListItem text="{employeeModelId>EmplName} - {employeeModelId>EmplId}" additionalText="{employeeModelId>EmplId}"/>
 									</suggestionItems>
@@ -150,7 +150,7 @@
 							</HBox>
 							<HBox class="formFieldPair">
 								<Label required="true" text="Effective Date:" class="labelInline"/>
-								<DatePicker id="datePickerHR" width="230px" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" change=".handleDateChange"
+								<DatePicker id="datePickerHR" width="230px" displayFormat="dd-MM-yyyy" valueFormat="dd-MM-yyyy" enabled="{stateModel>/empFieldEnabled}" change=".handleDateChange"
 									value="{ path: 'employeeModel>/EffectiveDate', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd-MM-yyyy' } }"/>
 							</HBox>
 						</HBox>

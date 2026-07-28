@@ -69,7 +69,8 @@ sap.ui.define([
 			var oStateModel = new sap.ui.model.json.JSONModel({
 				Actions: [],
 				selectedAction: "",
-				selectedRole: ""
+				selectedRole: "",
+				empFieldEnabled: false
 			});
 			this.getView().setModel(oStateModel, "stateModel");
 			// --------------------------------------------------------------------------------------------------------
@@ -147,10 +148,8 @@ sap.ui.define([
 				oStateModel.setProperty("/selectedRole", "MGR");
 				// this.loadEmployeeData(); // will populate /AllEmployees
 			} else if (oUserRole.Hrbp === "X" && sSelectedTab === "HR") {
-				// else if (oUserRole.Hrbp === "X" && sSelectedTab === "HR" && oUserRole.Manager === "X") {
 				aActions = aAllActions.filter(a => a.key !== "C1");
 				oStateModel.setProperty("/selectedRole", "HR");
-				// this.loadEmployeeData(); // will populate /AllEmployees
 			} else {
 				// EMP case → clear employees
 				aActions = [];
@@ -180,17 +179,22 @@ sap.ui.define([
 
 			if (!oModel) {
 				oModel = new sap.ui.model.json.JSONModel({});
-				// oView.setModel(oModel, "employeeModelId"); // ❌ oView is not defined yet
 			}
 			oModel.setProperty("/EmplId", "");
+			oModel.setProperty("/AllEmployees", []);
 			var oView = this.getView();
+			oView.getModel("stateModel").setProperty("/empFieldEnabled", false);
+			var oEmpInput = oView.byId("empItems");
+			if (oEmpInput) {
+				oEmpInput.setValue("");
+			}
 			["EMP", "MGR", "HR"].forEach(function (role) {
 
 				var oDP = oView.byId("datePicker" + role);
 				if (oDP) {
 					oDP.setValue("");
 					oDP.setDateValue(null);
-				} // both for safety
+				}
 			});
 		},
 		onActionChange: function (oEvent) {
@@ -207,6 +211,10 @@ sap.ui.define([
 				this.showHideModel();
 				this._updateFragment();
 				// this.sSelectedTab = "";
+			}
+			if (this.sSelectedTab === "HR" && sKey) {
+				oView.getModel("stateModel").setProperty("/empFieldEnabled", true);
+				this._loadEmployeeDropdown(oUser, sKey);
 			}
 		},
 
@@ -1638,9 +1646,31 @@ sap.ui.define([
 		// Added by Arnab - 02.06.2026
 		// fix By: Abhik
 		// Issue: When a user types in the Employee Input field (empItems) on the HRBP Action tab, the suggestion dropdown is slow to populate.
+		_loadEmployeeDropdown: function (sUserId, sRequestKey) {
+			var oDataModel = this.getOwnerComponent().getModel();
+			var aFilters = [
+				new sap.ui.model.Filter("UserId", sap.ui.model.FilterOperator.EQ, sUserId),
+				new sap.ui.model.Filter("RequestID", sap.ui.model.FilterOperator.EQ, sRequestKey)
+			];
+			oDataModel.read("/EmpIdDropDown", {
+				filters: aFilters,
+				success: function (oData) {
+					var oJsonModel = this.getView().getModel("employeeModelId");
+					if (oJsonModel) {
+						oJsonModel.setProperty("/AllEmployees", oData.results);
+					} else {
+						oJsonModel = new sap.ui.model.json.JSONModel({ AllEmployees: oData.results });
+						this.getView().setModel(oJsonModel, "employeeModelId");
+					}
+				}.bind(this),
+				error: function (oError) {
+					console.log("Error loading employee dropdown", oError);
+				}
+			});
+		},
 		onEmployeeLiveSearch: function (oEvent) {
-			var sValue = oEvent.getParameter("value");
-			if (!sValue || sValue.length < 3) {
+			var sValue = oEvent.getParameter("suggestValue");
+			if (!sValue) {
 				return;
 			}
 			if (this._employeeSearchTimer) {
