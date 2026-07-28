@@ -141,8 +141,8 @@
 						<HBox class="formRowHBox">
 							<HBox class="formFieldPair">
 								<Label required="true" text="Employee:" class="labelInline"/>
-								<Input width="230px" id="empItems" placeholder="Select Employee" showSuggestion="true" suggestionItems="{employeeModelId>/AllEmployees}"
-									liveChange=".onEmployeeLiveSearch" suggestionItemSelected="onEmployeeSelection">
+								<Input width="230px" id="empItems" placeholder="Select Employee" showSuggestion="true" startSuggestion="3" filterSuggests="false" suggestionItems="{employeeModelId>/AllEmployees}"
+									suggest=".onEmployeeLiveSearch" suggestionItemSelected="onEmployeeSelection">
 									<suggestionItems>
 										<core:ListItem text="{employeeModelId>EmplName} - {employeeModelId>EmplId}" additionalText="{employeeModelId>EmplId}"/>
 									</suggestionItems>

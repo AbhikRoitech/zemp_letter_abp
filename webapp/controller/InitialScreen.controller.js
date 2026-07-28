@@ -1639,8 +1639,8 @@ sap.ui.define([
 		// fix By: Abhik
 		// Issue: When a user types in the Employee Input field (empItems) on the HRBP Action tab, the suggestion dropdown is slow to populate.
 		onEmployeeLiveSearch: function (oEvent) {
-			var sValue = oEvent.getParameter("value");
-			if (!sValue || sValue.length < 3) {
+			var sValue = oEvent.getParameter("suggestValue");
+			if (!sValue) {
 				return;
 			}
 			if (this._employeeSearchTimer) {
