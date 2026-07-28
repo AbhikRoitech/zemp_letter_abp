@@ -112,9 +112,39 @@ sap.ui.define([
 			}
 		},
 		onRoleTabSelect: function (oEvent) {
+			var sPreviousTab = this.sSelectedTab;
 			this.sSelectedTab = oEvent.getParameter("selectedKey");
-			var sSelectedTab = oEvent.getParameter("selectedKey"); // "EMP", "MGR", "HR", "BOTH"
+			var sSelectedTab = oEvent.getParameter("selectedKey");
 			var oView = this.getView();
+
+			if (sPreviousTab === "HR" && sSelectedTab !== "HR") {
+				this._clearEmployeeSection();
+				oView.getModel("stateModel").setProperty("/empFieldEnabled", false);
+				oView.getModel("stateModel").setProperty("/selectedAction", "");
+				oView.getModel("stateModel").setProperty("/actionEnabled", true);
+				var oEmpModel = oView.getModel("employeeModel");
+				if (oEmpModel) {
+					oEmpModel.setData({});
+				}
+				var oEmpIdModel = oView.getModel("employeeModelId");
+				if (oEmpIdModel) {
+					oEmpIdModel.setProperty("/AllEmployees", []);
+					oEmpIdModel.setProperty("/EmplId", "");
+				}
+				if (this._oCurrentFragment) {
+					this._oCurrentFragment.destroy();
+					this._oCurrentFragment = null;
+				}
+				var oContainer = oView.byId("fragmentContainerHR");
+				if (oContainer) {
+					oContainer.removeAllItems();
+				}
+				var oCombo = oView.byId("empComboBoxHR");
+				if (oCombo) {
+					oCombo.setSelectedKey("");
+					oCombo.setEnabled(true);
+				}
+			}
 			var oUserRole = oView.getModel("roleModel").getProperty("/role") || {};
 			var oStateModel = oView.getModel("stateModel");
 			this.oStateCopy = structuredClone(oView.getModel("stateModel").getData());
@@ -271,13 +301,13 @@ sap.ui.define([
 
 			oContainer.removeAllItems();
 
-			sap.ui.core.Fragment.load({
+			return sap.ui.core.Fragment.load({
 				id: oView.getId(),
 				name: sFragmentName,
 				type: "XML",
 				controller: this
 			}).then(function (oFragment) {
-				this._oCurrentFragment = oFragment; //Added by Arnab.
+				this._oCurrentFragment = oFragment;
 				oContainer.addItem(oFragment);
 			}.bind(this));
 		},
@@ -580,6 +610,8 @@ sap.ui.define([
 							Hod1Designation: oSrvData.Hod1Designation || "",
 							NewRM: oSrvData.NewRm1Name || "",
 							Status: oSrvData.Status || "",
+							NewDesignation: oSrvData.NewDesignation || "",
+							MatrixManagerSelected: !!(oSrvData.NewMatrixManagerId && oSrvData.NewMatrixManagerId.replace(/^0+/, ""))
 						});
 						// ENABLE FOOTER
 						var oStateModel = oView.getModel("stateModel");
@@ -666,26 +698,42 @@ sap.ui.define([
 									oStateModel.setProperty("/selectedAction", sActionKey);
 									oStateModel.setProperty("/selectedRole", sRole);
 								}
-								that._updateFragment();
-
-								// oView.byId("newRMItems").setValue(oSrvData.NewRm1Id + "" + "-" + oSrvData.NewRm1Name);
-								// oView.byId("newRMItems").setEnabled(false);
-								// oView.byId("matrxMngrEmpId").setValue(oSrvData.MatrixManagerId);
-								// oView.byId("matrxMngrEmpId").setEnabled(false);
-								// oView.byId("newDesignation").setValue(oSrvData.Designation);
-								// oView.byId("newDesignation").setEnabled(false);
-
-								// --- Switch tab based on role ---
+								// Switch tab BEFORE loading fragment so the container is rendered
 								var oTabBar = that.byId("roleActionTabBar");
 								if (oTabBar) {
 									oTabBar.setSelectedKey(sRole);
 								}
-								// oView.byId("newRMItems").setValue(oSrvData.NewRm1Id + "" + "-" + oSrvData.NewRm1Name);
-								// oView.byId("newRMItems").setEnabled(false);
-								// oView.byId("matrxMngrEmpId").setValue(oSrvData.MatrixManagerId);
-								// oView.byId("matrxMngrEmpId").setEnabled(false);
-								// oView.byId("newDesignation").setValue(oSrvData.Designation);
-								// oView.byId("newDesignation").setEnabled(false);
+								that.sSelectedTab = sRole;
+
+								var oFragmentPromise = that._updateFragment();
+
+								if (oFragmentPromise) {
+									oFragmentPromise.then(function () {
+										var oNewDesig = oView.byId("newDesignation");
+										if (oNewDesig && oSrvData.NewDesignation) {
+											oNewDesig.setValue(oSrvData.NewDesignation);
+										}
+										var oNewRM = oView.byId("newRMItems");
+										if (oNewRM && oSrvData.NewRm1Name) {
+											var sRmValue = oSrvData.NewRm1Name;
+											if (oSrvData.NewRm1Id) {
+												sRmValue = sRmValue + " - " + oSrvData.NewRm1Id.replace(/^0+/, "");
+											}
+											oNewRM.setValue(sRmValue);
+										}
+										if (oSrvData.NewMatrixManagerId && oSrvData.NewMatrixManagerId.replace(/^0+/, "")) {
+											that.onMatrixCheck(true);
+											var oMatrixInput = oView.byId("matrxMngrEmpId");
+											if (oMatrixInput) {
+												var sMatrixVal = oSrvData.NewMatrixManagerName || "";
+												if (oSrvData.NewMatrixManagerId) {
+													sMatrixVal = sMatrixVal + " - " + oSrvData.NewMatrixManagerId.replace(/^0+/, "");
+												}
+												oMatrixInput.setValue(sMatrixVal);
+											}
+										}
+									});
+								}
 							}
 						}
 
@@ -1125,7 +1173,7 @@ sap.ui.define([
 					this._oCurrentFragment.destroy();
 					this._oCurrentFragment = null;
 				}
-				var oContainer = this.byId("fragmentContainerEMP");
+				var oContainer = this.byId("fragmentContainerHR");
 				if (oContainer) {
 					oContainer.removeAllItems();
 				}
