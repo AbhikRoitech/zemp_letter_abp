@@ -39,9 +39,15 @@ sap.ui.define([
 			if (!sOperation) {
 				sOperation = oEvent.getSource().getCustomData()[0].getValue();
 			}
-			// if (sText !== "Save" && !this._validateInputs(oFeedback, DateV, oController)) {
-			// 	return;
-			// }
+			// Validate mandatory fields before Submit only (skip for Save)
+			if (sText !== "Save" && !this._validateInputs(oFeedback, DateV, oController)) {
+				return;
+			}
+			// For Save: at least one of Confirmation or Extension of Probation must be selected
+			if (sText === "Save" && oFeedback.ProbationStatus !== 0 && oFeedback.ProbationStatus !== 1) {
+				MessageBox.warning("Please select either Confirmation or Extension of Probation before saving.");
+				return;
+			}
 			var sNewDesignation = "";
 			if (oView.byId("newDesignation")) {
 				sNewDesignation = oView.byId("newDesignation").getValue();
@@ -113,11 +119,11 @@ sap.ui.define([
 				Hod1Designation: "",
 				Hod2Id: (oFeedback.Hod2Name).split("-")[0].trim(),
 				ChroId: (oFeedback.ChroName).split("-")[0].trim(),
-				QuntityOfOutput: "",
-				QalityOfOutput: "",
-				SenseOfResponsibility: "",
-				TeamworkAndCollaboration: "",
-				TimeManagementAndDiscipline: "",
+				QuntityOfOutput: oFeedback.Quantity || "",
+				QalityOfOutput: oFeedback.Quality || "",
+				SenseOfResponsibility: oFeedback.Responsibility || "",
+				TeamworkAndCollaboration: oFeedback.Teamwork || "",
+				TimeManagementAndDiscipline: oFeedback.Time || "",
 				Rm1Comment: oFeedback.CommentRM1 || "",
 				Rm2Comment: oFeedback.CommentRM2 || "",
 				Rm3Comment: oFeedback.CommentRM3 || "",
@@ -127,27 +133,10 @@ sap.ui.define([
 				HrbpComment: oFeedback.CommentHRBP || "",
 				Confirmation: false,
 				ExtensionOfProbation: false,
-				NewDesignation: sNewDesignation,
-				NewRm1Id: sNewRm1Id,
-				NewRm1Name: sNewRm1Name,
-				NewRm1Designation: "",
-				NewMatrixManagerId: sNewMatrixManagerId,
-				NewMatrixManagerName: sNewMatrixManagerName,
-				NewMatrixManagerDesig: "",
-				NewSbuId: "",
-				NewSbuText: "",
-				NewOrgunitId: "",
-				NewOrgUnittext: "",
-				NewLocationId: "",
-				NewLocationText: "",
-				NewBuildingId: "",
-				NewBuildingText: "",
-				RetirementDate: "",
 				CurrentProcessor: "",
 				CurrentProcessorId: "",
 				Status: "",
 				CurrentWfTaskId: "",
-				Submit: false,
 				CreatedDate: DateV,
 				CreatedBy: "",
 				LastChangedOn: DateV,
@@ -166,13 +155,54 @@ sap.ui.define([
 				Rm3Name: "",
 				Hod2Name: "",
 				ChroName: "",
-				Instanceid: "",
-				Edit: false
 			};
 
-			// if (proceed) {
+			if (sAction !== "C1") {
+				oEntry.Edit = false;
+				oEntry.Instanceid = "";
+				oEntry.NewDesignation = sNewDesignation;
+				oEntry.NewRm1Id = sNewRm1Id;
+				oEntry.NewRm1Name = sNewRm1Name;
+				oEntry.NewRm1Designation = "";
+				oEntry.NewMatrixManagerId = sNewMatrixManagerId;
+				oEntry.NewMatrixManagerName = sNewMatrixManagerName;
+				oEntry.NewMatrixManagerDesig = "";
+				oEntry.NewSbuId = "";
+				oEntry.NewSbuText = "";
+				oEntry.NewOrgunitId = "";
+				oEntry.NewOrgUnittext = "";
+				oEntry.NewLocationId = "";
+				oEntry.NewLocationText = "";
+				oEntry.NewBuildingId = "";
+				oEntry.NewBuildingText = "";
+				oEntry.RetirementDate = null;
+				oEntry.Submit = false;
+			}
+
+			var oMetadata = oModel.getServiceMetadata();
+			if (oMetadata) {
+				var sEntityName = sEntitySet.replace("/", "");
+				var oSchema = oMetadata.dataServices.schema[0];
+				var oEntitySet = (oSchema.entityContainer || []).reduce(function (found, ec) {
+					return found || (ec.entitySet || []).find(function (es) { return es.name === sEntityName; });
+				}, null);
+				if (oEntitySet) {
+					var sEntityTypeName = oEntitySet.entityType.split(".").pop();
+					var oEntityType = (oSchema.entityType || []).find(function (et) { return et.name === sEntityTypeName; });
+					if (oEntityType) {
+						var aValidProps = oEntityType.property.map(function (p) { return p.name; });
+						Object.keys(oEntry).forEach(function (sKey) {
+							if (aValidProps.indexOf(sKey) === -1) {
+								delete oEntry[sKey];
+							}
+						});
+					}
+				}
+			}
+
 			var that = oController;
 			oView.setBusy(true);
+			console.log("OData CREATE →", sEntitySet, JSON.parse(JSON.stringify(oEntry)));
 			oModel.create(sEntitySet, oEntry, {
 				success: function (oData, response) {
 					var oViewModel = that.getView().getModel("employeeModel");
