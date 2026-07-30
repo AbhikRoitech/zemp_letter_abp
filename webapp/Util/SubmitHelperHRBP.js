@@ -147,14 +147,13 @@ sap.ui.define([
 				Hod2Approver: "",
 				ChroApprover: "",
 				HrbpApprover: "",
-				Operation: "SAV",
+				Operation: sOperation,
 				ApvrType: "",
 				HrbpName: "",
 				Rm2Name: "",
 				Rm3Name: "",
 				Hod2Name: "",
 				ChroName: "",
-				Edit: false,
 				Instanceid: "",
 				NewDesignation: sNewDesignation,
 				NewRm1Id: sNewRm1Id,
@@ -172,8 +171,15 @@ sap.ui.define([
 				NewBuildingId: "",
 				NewBuildingText: "",
 				RetirementDate: "",
+				Edit: false,
 				Submit: false
 			};
+
+			if (sAction === "C1") {
+				oEntry.RetirementDate = null;
+				oEntry.Edit = "";
+				oEntry.Submit = "";
+			}
 
 			var oMetadata = oModel.getServiceMetadata();
 			if (oMetadata) {

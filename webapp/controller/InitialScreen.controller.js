@@ -1195,6 +1195,8 @@ sap.ui.define([
 					oContainer.removeAllItems();
 				}
 			}
+
+			this.compeleteDisableFooter();
 		},
 
 		onSelectChange: function (oEvent) {
