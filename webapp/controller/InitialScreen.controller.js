@@ -524,7 +524,12 @@ sap.ui.define([
 			// 	text: "Confirmation / Probation Extension"
 			// }];
 			var aAllActions = [];
-			if (sActionText === "Re-designation") {
+			if (sActionText === "Confirmation" || sActionText === "Probation Extension" || sActionText === "Confirmation / Probation Extension")  {
+				aAllActions.push({
+					key: "C1",
+					text: "Confirmation / Probation Extension"
+				});
+			} else if (sActionText === "Re-designation") {
 				aAllActions.push({
 					key: "R1",
 					text: "Re-Designation"
@@ -534,7 +539,6 @@ sap.ui.define([
 					key: "R2",
 					text: "Retirement"
 				});
-
 			} else if (sActionText === "Transfer") {
 				aAllActions.push({
 					key: "T1",
@@ -683,6 +687,8 @@ sap.ui.define([
 							oActionSelect.setSelectedKey("");
 							var mActionMap = {
 								"Confirmation / Probation Extension": "C1",
+								"Confirmation": "C1",
+								"Probation Extension": "C1",
 								"Re-designation": "R1",
 								"Retirement": "R2",
 								"Transfer": "T1"
