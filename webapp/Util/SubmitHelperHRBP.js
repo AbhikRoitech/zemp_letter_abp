@@ -154,29 +154,26 @@ sap.ui.define([
 				Rm3Name: "",
 				Hod2Name: "",
 				ChroName: "",
+				Edit: false,
+				Instanceid: "",
+				NewDesignation: sNewDesignation,
+				NewRm1Id: sNewRm1Id,
+				NewRm1Name: sNewRm1Name,
+				NewRm1Designation: "",
+				NewMatrixManagerId: sNewMatrixManagerId,
+				NewMatrixManagerName: sNewMatrixManagerName,
+				NewMatrixManagerDesig: "",
+				NewSbuId: "",
+				NewSbuText: "",
+				NewOrgunitId: "",
+				NewOrgUnittext: "",
+				NewLocationId: "",
+				NewLocationText: "",
+				NewBuildingId: "",
+				NewBuildingText: "",
+				RetirementDate: null,
+				Submit: false
 			};
-
-			if (sAction !== "C1") {
-				oEntry.Edit = false;
-				oEntry.Instanceid = "";
-				oEntry.NewDesignation = sNewDesignation;
-				oEntry.NewRm1Id = sNewRm1Id;
-				oEntry.NewRm1Name = sNewRm1Name;
-				oEntry.NewRm1Designation = "";
-				oEntry.NewMatrixManagerId = sNewMatrixManagerId;
-				oEntry.NewMatrixManagerName = sNewMatrixManagerName;
-				oEntry.NewMatrixManagerDesig = "";
-				oEntry.NewSbuId = "";
-				oEntry.NewSbuText = "";
-				oEntry.NewOrgunitId = "";
-				oEntry.NewOrgUnittext = "";
-				oEntry.NewLocationId = "";
-				oEntry.NewLocationText = "";
-				oEntry.NewBuildingId = "";
-				oEntry.NewBuildingText = "";
-				oEntry.RetirementDate = null;
-				oEntry.Submit = false;
-			}
 
 			var oMetadata = oModel.getServiceMetadata();
 			if (oMetadata) {
