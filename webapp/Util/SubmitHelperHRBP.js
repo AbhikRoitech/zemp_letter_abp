@@ -171,7 +171,7 @@ sap.ui.define([
 				NewLocationText: "",
 				NewBuildingId: "",
 				NewBuildingText: "",
-				RetirementDate: null,
+				RetirementDate: "",
 				Submit: false
 			};
 
@@ -227,7 +227,7 @@ sap.ui.define([
 				},
 				error: function (oError) {
 					oView.setBusy(false);
-					sap.m.MessageBox.error("Submission failed!");
+					sap.m.MessageBox.error(sText === "Save" ? "Save failed!" : "Submission failed!");
 				}
 			});
 			// }
