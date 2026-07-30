@@ -40,12 +40,11 @@ sap.ui.define([
 				sOperation = oEvent.getSource().getCustomData()[0].getValue();
 			}
 			// Validate mandatory fields before Submit only (skip for Save)
-			if (sText !== "Save" && !this._validateInputs(oFeedback, DateV, oController)) {
+			if (sText !== "Save" && !this._validateInputs(oFeedback, DateV, oController, sAction)) {
 				return;
 			}
-			// For Save: at least one of Confirmation or Extension of Probation must be selected
-			if (sText === "Save" && oFeedback.ProbationStatus !== 0 && oFeedback.ProbationStatus !== 1) {
-				MessageBox.warning("Please select either Confirmation or Extension of Probation before saving.");
+			// Confirmation eligibility check applies for both Save and Submit (C1 only)
+			if (sAction === "C1" && !this._validateConfirmationEligibility(oFeedback, oController)) {
 				return;
 			}
 			var sNewDesignation = "";
@@ -276,7 +275,7 @@ sap.ui.define([
 
 			return bValid;
 		},
-		_validateInputs: function (oFeedback, oEffDate, oController) {
+		_validateInputs: function (oFeedback, oEffDate, oController, sAction) {
 			var aMissingFields = [];
 
 			// Effective Date check
@@ -284,61 +283,37 @@ sap.ui.define([
 				aMissingFields.push("Effective Date");
 			}
 
-			// Feedback Ratings check
-			if (!oFeedback.Quantity) {
-				aMissingFields.push("Quantity of Output");
-			}
-			if (!oFeedback.Quality) {
-				aMissingFields.push("Quality of Output");
-			}
-			if (!oFeedback.Responsibility) {
-				aMissingFields.push("Sense of Responsibility");
-			}
-			if (!oFeedback.Teamwork) {
-				aMissingFields.push("Teamwork and Collaboration");
-			}
-			if (!oFeedback.Time) {
-				aMissingFields.push("Time Management and Discipline");
-			}
-
-			// Comment check
-			if (!oFeedback.CommentRM1) {
-				aMissingFields.push("Comment should not be empty");
-			}
-
-			// Probation Status check (must be either 0 or 1)
-			if (oFeedback.ProbationStatus !== 0 && oFeedback.ProbationStatus !== 1) {
-				aMissingFields.push("Probation Status (Confirmation or Extension)");
-			}
-			// CONFIRMATION ELIGIBILITY VALIDATION
-			const oModel = oController.getView().getModel("feedbackModel");
-			const ratings = [
-				oFeedback.Quantity,
-				oFeedback.Quality,
-				oFeedback.Responsibility,
-				oFeedback.Teamwork,
-				oFeedback.Time
-			].filter(Boolean);
-
-			const belowExpectations = ratings.includes("BELOW EXPECTATIONS");
-			const satisfactoryCount = ratings.filter(r => r === "SATISFACTORY").length;
-			const probationStatus = oFeedback.ProbationStatus;
-			let confirmationAllowed = true;
-
-			if (probationStatus === 1) {
-				oModel.setProperty("/confirmationAllowed", true);
-			} else {
-				// Only check confirmation eligibility if probation status is 0 (Confirmation)
-				if (belowExpectations || satisfactoryCount > 1) {
-					confirmationAllowed = false;
-					// Push error to aMissingFields instead of showing separate MessageBox
-					aMissingFields.push("You cannot recommend confirmation with this set of ratings");
+			if (sAction === "C1") {
+				// Feedback Ratings check
+				if (!oFeedback.Quantity) {
+					aMissingFields.push("Quantity of Output");
 				}
-				oModel.setProperty("/confirmationAllowed", confirmationAllowed);
+				if (!oFeedback.Quality) {
+					aMissingFields.push("Quality of Output");
+				}
+				if (!oFeedback.Responsibility) {
+					aMissingFields.push("Sense of Responsibility");
+				}
+				if (!oFeedback.Teamwork) {
+					aMissingFields.push("Teamwork and Collaboration");
+				}
+				if (!oFeedback.Time) {
+					aMissingFields.push("Time Management and Discipline");
+				}
+
+				// Comment check
+				if (!oFeedback.CommentRM1) {
+					aMissingFields.push("Comment should not be empty");
+				}
+
+				// Probation Status check (must be either 0 or 1)
+				if (oFeedback.ProbationStatus !== 0 && oFeedback.ProbationStatus !== 1) {
+					aMissingFields.push("Probation Status (Confirmation or Extension)");
+				}
 			}
+
 			// If any field missing, show bullet-style message
 			if (aMissingFields.length > 0) {
-				//Added by Arnab.
 				const sMessage =
 					"Please check the following points before submitting:\n\n\u2022 " +
 					aMissingFields.join("\n\u2022 ");
@@ -347,6 +322,34 @@ sap.ui.define([
 				return false;
 			}
 
+			return true;
+		},
+		_validateConfirmationEligibility: function (oFeedback, oController) {
+			var oModel = oController.getView().getModel("feedbackModel");
+			var ratings = [
+				oFeedback.Quantity,
+				oFeedback.Quality,
+				oFeedback.Responsibility,
+				oFeedback.Teamwork,
+				oFeedback.Time
+			].filter(Boolean);
+
+			var belowExpectations = ratings.includes("BELOW EXPECTATIONS");
+			var satisfactoryCount = ratings.filter(function (r) { return r === "SATISFACTORY"; }).length;
+			var probationStatus = oFeedback.ProbationStatus;
+
+			if (probationStatus === 1) {
+				oModel.setProperty("/confirmationAllowed", true);
+				return true;
+			}
+
+			if (belowExpectations || satisfactoryCount > 1) {
+				oModel.setProperty("/confirmationAllowed", false);
+				sap.m.MessageBox.error("You cannot recommend confirmation with this set of ratings");
+				return false;
+			}
+
+			oModel.setProperty("/confirmationAllowed", true);
 			return true;
 		},
 		loadTrackClaimsData: function (oController) {
